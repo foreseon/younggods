@@ -1,6 +1,6 @@
 import { Routes, Route, Link, Outlet } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ygGold from '../images/yg-gold.jpg';
 import ygFather from '../images/yg-father.jpg';
 import ygMinigun from '../images/yg-minigun.jpg';
@@ -43,8 +43,8 @@ function Layout() {
           {/* Dark overlay for better text contrast */}
           <div className="absolute inset-0 bg-black/60" />
 
-          {/* Center button */}
-          <div className="relative z-10 flex items-center justify-center h-full">
+          {/* Center button and CA text */}
+          <div className="relative z-10 flex flex-col items-center justify-center h-full">
             <button
               onClick={handleEnterSite}
               className="flex items-center px-12 py-6 text-3xl md:text-5xl font-extrabold tracking-widest text-white bg-black/70 border-4 border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105 active:scale-95"
@@ -55,6 +55,9 @@ function Layout() {
               {/* Right coin */}
               <img src={logoShort} alt="coin" className="hidden md:block w-10 h-10 ml-4 animate-coin-flip rounded-full object-cover border-2 border-yellow-400 shadow-lg" />
             </button>
+            <p className="mt-4 text-base font-semibold tracking-wider animate-text-shine">
+              CA: tomorrow.
+            </p>
           </div>
         </div>
       )}
@@ -75,17 +78,53 @@ function Layout() {
         <main className="flex-1 flex flex-col items-center justify-center w-full">
           <Outlet />
         </main>
-        <footer className="w-full py-6 text-center text-gray-500 border-t border-gray-800">©2024 YoungGods. All Rights Reserved.</footer>
+        <footer className="w-full py-6 text-center text-gray-500 border-t border-gray-800">©2025 YoungGods. All Rights Reserved.</footer>
       </div>
     </>
   );
 }
 
 function Main() {
+  const [pumps, setPumps] = useState([]);
+  const [glitch, setGlitch] = useState(false);
+
+  useEffect(() => {
+    const addPump = () => {
+      setPumps(prev => [
+        ...prev,
+        {
+          id: Date.now() + Math.random(),
+          left: Math.random() * 100,
+          top: Math.random() * 100,
+          hard: Math.random() < 0.4, // 40% chance hard pump
+        },
+      ]);
+    };
+
+    // spawn every 4s
+    const interval = setInterval(addPump, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // regular glitch every 2 seconds
+  useEffect(() => {
+    const glitchInterval = setInterval(() => {
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 600); // glitch visible for 0.6s
+    }, 2000);
+
+    return () => clearInterval(glitchInterval);
+  }, []);
+
   return (
     <section className="w-full max-w-7xl text-center mb-20 px-4">
       <div className="mb-16">
-        <img src={logoLong} alt="Main Banner" className="w-full h-[600px] object-cover rounded-2xl shadow-2xl" />
+        <img
+          src={logoLong}
+          alt="Main Banner"
+          className={`w-full h-48 sm:h-64 md:h-[500px] lg:h-[600px] object-cover rounded-2xl shadow-2xl ${glitch ? 'glitch' : ''}`}
+        />
       </div>
 
       {/* Explore section */}
@@ -117,39 +156,117 @@ function Main() {
 
       <h2 className="text-5xl font-black mb-12 text-white">Community</h2>
       <div className="flex flex-col md:flex-row justify-center gap-6 mb-16">
-        <a href="#" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
+        <a href="https://t.me/YoungDeGods" target="_blank" rel="noopener noreferrer" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
           <span className="inline-block w-6 h-6">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-indigo-400"><path d="M20.317 4.369A19.791 19.791 0 0 0 16.885 3.1a.074.074 0 0 0-.078.037c-.34.607-.719 1.396-.984 2.013a18.219 18.219 0 0 0-5.456 0 12.51 12.51 0 0 0-.995-2.013.077.077 0 0 0-.078-.037A19.736 19.736 0 0 0 3.684 4.369a.07.07 0 0 0-.032.027C.533 8.159-.32 11.81.099 15.404a.082.082 0 0 0 .031.056c2.052 1.507 4.042 2.422 5.992 3.029a.077.077 0 0 0 .084-.027c.461-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.104c-.652-.247-1.27-.549-1.872-.892a.077.077 0 0 1-.008-.128c.126-.094.252-.192.371-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.075.075 0 0 1 .078.009c.12.099.245.197.372.291a.077.077 0 0 1-.006.128 12.298 12.298 0 0 1-1.873.892.076.076 0 0 0-.04.105c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028c1.961-.607 3.951-1.522 6.003-3.029a.077.077 0 0 0 .03-.055c.5-4.073-.838-7.693-3.285-10.999a.061.061 0 0 0-.03-.028zM8.02 14.331c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.094 2.156 2.418 0 1.334-.955 2.419-2.156 2.419zm7.974 0c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.094 2.156 2.418 0 1.334-.946 2.419-2.156 2.419z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-cyan-400"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.93 7.39l-1.39 6.53c-.105.464-.38.577-.77.36l-2.13-1.57-1.03 1c-.114.114-.21.21-.43.21l.16-2.24 4.09-3.69c.18-.16-.04-.25-.28-.09l-5.05 3.18-2.18-.68c-.47-.15-.48-.47.1-.7l8.53-3.3c.39-.15.73.09.6.7z"/></svg>
           </span>
-          Join Discord
+          Telegram
         </a>
-        <a href="#" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
+        <a href="https://x.com/YoungDeGods" target="_blank" rel="noopener noreferrer" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
           <span className="inline-block w-6 h-6">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </span>
           Follow on X
         </a>
+        <a href="https://discord.gg/HFUupt2VRR" target="_blank" rel="noopener noreferrer" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
+          <span className="inline-block w-6 h-6">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-indigo-400"><path d="M20.317 4.369A19.791 19.791 0 0 0 16.885 3.1a.074.074 0 0 0-.078.037c-.34.607-.719 1.396-.984 2.013a18.219 18.219 0 0 0-5.456 0 12.51 12.51 0 0 0-.995-2.013.077.077 0 0 0-.078-.037A19.736 19.736 0 0 0 3.684 4.369a.07.07 0 0 0-.032.027C.533 8.159-.32 11.81.099 15.404a.082.082 0 0 0 .031.056c2.052 1.507 4.042 2.422 5.992 3.029a.077.077 0 0 0 .084-.027c.461-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.104c-.652-.247-1.27-.549-1.872-.892a.077.077 0 0 1-.008-.128c.126-.094.252-.192.371-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.075.075 0 0 1 .078.009c.12.099.245.197.372.291a.077.077 0 0 1-.006.128 12.298 12.298 0 0 1-1.873.892.076.076 0 0 0-.04.105c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028c1.961-.607 3.951-1.522 6.003-3.029a.077.077 0 0 0 .03-.055c.5-4.073-.838-7.693-3.285-10.999a.061.061 0 0 0-.03-.028zM8.02 14.331c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.094 2.156 2.418 0 1.334-.955 2.419-2.156 2.419zm7.974 0c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.094 2.156 2.418 0 1.334-.946 2.419-2.156 2.419z"/></svg>
+          </span>
+          Discord
+        </a>
       </div>
 
-      <h3 className="text-[120px] font-black text-white tracking-tighter mb-20" style={{ fontFamily: 'Impact, sans-serif' }}>YOUNG GODS</h3>
+      <h3 className="text-[60px] md:text-[80px] lg:text-[120px] font-black text-white tracking-tighter mb-20" style={{ fontFamily: 'Impact, sans-serif' }}>YOUNG GODS</h3>
       
       <p className="text-4xl font-black text-white tracking-widest mb-16" style={{ fontFamily: 'Arial Black, sans-serif' }}>
-        DIGITAL DOMINANCE. BLOCKCHAIN POWER.
+        LOST CHILDREN OF GODS.
+      </p>
+      
+      <p className="text-3xl font-bold text-yellow-400 tracking-wider mb-10" style={{ fontFamily: 'Arial, sans-serif' }}>
+        THE 3333 VESSELS OF POWER HAVE BEEN CLAIMED. THE GATES ARE CLOSED.
       </p>
       
       <p className="text-2xl font-bold text-gray-300 tracking-wider mb-16" style={{ fontFamily: 'Arial, sans-serif' }}>
-        YOUNGGODS EMERGED FROM THE VOID. WE WIELD BLOCKCHAIN LIKE THE GODS OF OLD WIELDED LIGHTNING.
-        OUR NFTS ARE VESSELS OF RAW POWER.
+        TIME FOR NEXT STAGE, ASCENSION OF $YG.
       </p>
       
       <p className="text-5xl font-black text-white tracking-tight mb-16" style={{ fontFamily: 'Impact, sans-serif' }}>
-        STAKE. EARN. DOMINATE.
+        $YG TOMORROW.
       </p>
       
       <p className="text-2xl font-bold text-gray-400 tracking-wide mb-20" style={{ fontFamily: 'Arial, sans-serif' }}>
-        THE PATH TO DIGITAL DIVINITY IS PAVED WITH THE REMAINS OF THE WEAK.
-        ONLY THE STRONGEST WILL ASCEND.
+        NEW TRIALS AWAIT.
       </p>
+
+      {/* Green pumps */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {pumps.map(p => (
+          <div
+            key={p.id}
+            className={p.hard ? 'green-pump-hard' : 'green-pump-soft'}
+            style={{ left: `${p.left}%`, top: `${p.top}%` }}
+          />
+        ))}
+      </div>
+
+      {/* Pump styles */}
+      <style jsx>{`
+        @keyframes pumpSoft {
+          0% { transform: scale(0); opacity: 0.4; }
+          80% { opacity: 0.2; }
+          100% { transform: scale(2); opacity: 0; }
+        }
+
+        @keyframes pumpHard {
+          0% { transform: scale(0); opacity: 0.7; }
+          60% { opacity: 0.3; }
+          100% { transform: scale(4); opacity: 0; }
+        }
+
+        .green-pump-soft, .green-pump-hard {
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(0,255,0,0.8) 0%, rgba(0,255,0,0) 70%);
+          pointer-events: none;
+        }
+
+        .green-pump-soft { animation: pumpSoft 2s ease-out forwards; }
+        .green-pump-hard { animation: pumpHard 1.5s ease-out forwards; }
+
+        /* glitch keyframes */
+        @keyframes glitch {
+          0% {
+            clip-path: inset(0 0 0 0);
+            transform: translate(0);
+          }
+          20% {
+            clip-path: inset(10% 0 85% 0);
+            transform: translate(-5px, -5px);
+          }
+          40% {
+            clip-path: inset(80% 0 5% 0);
+            transform: translate(5px, 5px);
+          }
+          60% {
+            clip-path: inset(30% 0 50% 0);
+            transform: translate(-5px, 5px);
+          }
+          80% {
+            clip-path: inset(60% 0 25% 0);
+            transform: translate(5px, -5px);
+          }
+          100% {
+            clip-path: inset(0 0 0 0);
+            transform: translate(0);
+          }
+        }
+
+        .glitch {
+          animation: glitch 0.6s steps(2, end);
+        }
+      `}</style>
     </section>
   );
 }
@@ -158,7 +275,10 @@ function Shop() {
   return (
     <section className="w-full max-w-5xl mx-auto text-center mb-20 px-4">
       <h1 className="text-5xl font-black mb-6 text-white">Shop</h1>
-      <p className="mb-12 text-lg text-gray-400 max-w-2xl mx-auto">Coming soon...</p>
+      <p className="mb-4 text-lg text-gray-400 max-w-2xl mx-auto">Coming soon...</p>
+      <p className="mb-12 text-xl font-semibold text-yellow-400 max-w-2xl mx-auto" style={{ textShadow: '0 0 8px rgba(255, 215, 0, 0.5)' }}>
+        THE YOUNGGODS ARMORY WILL ACCEPT $YG EXCLUSIVELY.
+      </p>
       <div className="bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-700">
         <table className="w-full border-collapse">
           <thead>
@@ -237,6 +357,7 @@ function Game() {
   };
 
   return (
+    <section className="w-full max-w-5xl mx-auto text-center mb-10 px-4">
     <section className="w-full max-w-6xl mx-auto text-center mb-20 px-4">
       <h1 className="text-7xl font-black mb-12 text-white tracking-tighter">COIN TOSS</h1>
       
@@ -245,16 +366,20 @@ function Game() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)' }}></div>
         
         <div className="relative z-10">
-          <div className="text-3xl font-black text-white mb-8">
-            BALANCE: <span className="text-green-400">{balance}</span> TOKENS
-          </div>
-          
-          <div className="flex flex-col items-center gap-8 mb-12">
+          <div className="text-2xl font-black text-white mb-2">
+             BALANCE: <span className="text-green-400">{balance}</span> TOKENS
+           </div>
+           <p className="text-sm font-semibold text-yellow-400 mb-6" style={{ textShadow: '0 0 8px rgba(255, 215, 0, 0.5)' }}>(Gamified with test tokens. Will operate with $YG post-launch)</p>
+           
+          <div className="flex flex-col items-center gap-6 mb-8">
             <div className="relative">
               <input
                 type="number"
                 value={betAmount}
-                onChange={(e) => setBetAmount(Number(e.target.value))}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  setBetAmount(value < 0 ? 0 : value);
+                }}
                 placeholder="ENTER BET AMOUNT"
                 className="bg-gray-900 text-white px-8 py-4 rounded-xl w-64 text-center text-xl font-bold border-4 border-gray-800 focus:outline-none focus:border-white transition-all duration-300"
               />
@@ -263,37 +388,37 @@ function Game() {
             <div className="flex gap-6">
               <button
                 onClick={() => handleFlip('heads')}
-                disabled={isFlipping || betAmount <= 0 || betAmount > balance}
-                className="bg-white text-black px-12 py-6 rounded-xl font-black text-2xl hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
+                disabled={isFlipping || !betAmount || betAmount <= 0 || betAmount > balance}
+                className="bg-white text-black px-10 py-4 rounded-xl font-black text-xl hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
               >
                 HEADS
               </button>
               <button
                 onClick={() => handleFlip('tails')}
-                disabled={isFlipping || betAmount <= 0 || betAmount > balance}
-                className="bg-white text-black px-12 py-6 rounded-xl font-black text-2xl hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
+                disabled={isFlipping || !betAmount || betAmount <= 0 || betAmount > balance}
+                className="bg-white text-black px-10 py-4 rounded-xl font-black text-xl hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
               >
                 TAILS
               </button>
             </div>
           </div>
 
-          <div className="relative h-96 flex items-center justify-center">
-            <div className={`w-48 h-48 relative ${isFlipping ? 'animate-flip' : ''}`}>
+          <div className="relative h-64 flex items-center justify-center">
+            <div className={`w-40 h-40 relative ${isFlipping ? 'animate-flip' : ''}`}>
               <div className={`absolute w-full h-full ${isFlipping ? 'animate-rotate' : ''}`}>
-                <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-full flex items-center justify-center border-4 border-gray-700 shadow-2xl">
-                  {!isFlipping && result && (
-                    <span className="text-6xl font-black text-white">
-                      {result === 'heads' ? 'H' : 'T'}
-                    </span>
-                  )}
+                <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-full flex items-center justify-center border-4 border-yellow-500 shadow-2xl overflow-hidden">
+                  <img 
+                    src={logoShort} 
+                    alt="Coin face" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
           </div>
 
           {showResult && (
-            <div className="mt-12">
+            <div className="mt-8">
               <p className={`text-4xl font-black ${result === userChoice ? 'text-green-400' : 'text-red-400'} mb-4`}>
                 {result === userChoice ? 'YOU WON!' : 'YOU LOST!'}
               </p>
@@ -345,13 +470,15 @@ function Game() {
           )}
 
           {/* Loss Animation */}
-          {showResult && !showVictoryPopup && (
+          {showResult && !showVictoryPopup && result !== userChoice && (
             <div className="fixed inset-0 pointer-events-none">
               <div className="absolute inset-0 bg-red-500 opacity-0 animate-loss-flash"></div>
             </div>
           )}
         </div>
       </div>
+
+      </section>
 
       <style jsx>{`
         @keyframes flip {
@@ -423,9 +550,11 @@ function Staking() {
     <section className="w-full max-w-7xl mx-auto mb-20 px-4">
       <h1 className="text-5xl font-black mb-6 text-white text-center">NFT Staking</h1>
       <p className="mb-12 text-lg text-gray-400 max-w-2xl mx-auto text-center">
-        Stake your NFTs to earn points. Points are accumulated over time and can be used for various benefits.
+        Opens tomorrow. Stake your NFTs to earn rewards. <span className="text-yellow-400 font-semibold">$YG</span> holders will receive exclusive bonuses.
         <br />
         <span className="text-red-400">Warning: Unstaking will result in loss of accumulated points.</span>
+        <br />
+        <span className="text-gray-500 text-sm italic">Images shown are dummy placeholders.</span>
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -441,7 +570,7 @@ function Staking() {
             {[1, 2, 3, 4, 5, 6].map((nft) => (
               <div key={nft} className="relative group">
                 <div className="bg-gray-700 rounded-lg p-4 border-2 border-gray-600 group-hover:border-white transition-all duration-300">
-                  <img src={reactLogo} alt={`NFT ${nft}`} className="w-full aspect-square object-cover rounded-lg mb-2" />
+                  <img src={logoShort} alt={`NFT ${nft} (dummy)`} className="w-full aspect-square object-cover rounded-lg mb-2" />
                   <div className="flex justify-between items-center">
                     <span className="text-white font-bold">NFT #{nft}</span>
                     <input type="checkbox" className="w-5 h-5 rounded border-gray-600" />
@@ -470,7 +599,7 @@ function Staking() {
             {[1, 2, 3].map((nft) => (
               <div key={nft} className="relative group">
                 <div className="bg-gray-700 rounded-lg p-4 border-2 border-gray-600 group-hover:border-white transition-all duration-300">
-                  <img src={reactLogo} alt={`Staked NFT ${nft}`} className="w-full aspect-square object-cover rounded-lg mb-2" />
+                  <img src={logoShort} alt={`Staked NFT ${nft} (dummy)`} className="w-full aspect-square object-cover rounded-lg mb-2" />
                   <div className="flex justify-between items-center">
                     <div>
                       <span className="text-white font-bold block">NFT #{nft}</span>
@@ -511,47 +640,162 @@ function Staking() {
 }
 
 function Token() {
+  const [tokens, setTokens] = useState([]);
+  const [blasts, setBlasts] = useState([]);
+  const blastDelayRef = useRef(2500);
+  const blastTimeout = useRef(null);
+
+  useEffect(() => {
+    const spawnBlast = () => {
+      const newBlast = { id: Date.now() + Math.random() };
+      setBlasts(prev => [...prev, newBlast]);
+      setTimeout(() => {
+        setBlasts(prev => prev.filter(b => b.id !== newBlast.id));
+      }, 800);
+
+      // decrease delay down to 500ms min
+      blastDelayRef.current = Math.max(500, blastDelayRef.current - 100);
+      blastTimeout.current = setTimeout(spawnBlast, blastDelayRef.current);
+    };
+
+    blastTimeout.current = setTimeout(spawnBlast, blastDelayRef.current);
+
+    return () => clearTimeout(blastTimeout.current);
+  }, []);
+
+  useEffect(() => {
+    // helper to add a floating token
+    const addToken = () => {
+      setTokens(prev => [
+        ...prev,
+        {
+          id: Date.now() + Math.random(),
+          size: 20 + Math.random() * 30,
+          left: Math.random() * 100,
+          top: Math.random() * 100,
+          duration: 6 + Math.random() * 6,
+        },
+      ]);
+    };
+
+    // seed initial tokens
+    for (let i = 0; i < 30; i++) addToken();
+
+    // keep adding tokens over time (faster spawn)
+    const tokenInterval = setInterval(addToken, 1000);
+
+    return () => clearInterval(tokenInterval);
+  }, []);
+
   return (
     <section className="w-full max-w-7xl mx-auto text-center mb-20 px-4">
-      <div className="relative mb-16">
-        <h1 className="text-7xl font-black text-white tracking-tighter" style={{ textShadow: '0 0 30px rgba(255,255,255,0.4)' }}>$YG</h1>
+      {/* Floating tokens & green blasts */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {tokens.map(token => (
+          <img
+            key={token.id}
+            src={logoShort}
+            alt="token"
+            className="floating-token rounded-full border-2 border-yellow-400 shadow-lg object-cover"
+            style={{
+              width: token.size,
+              height: token.size,
+              left: `${token.left}%`,
+              top: `${token.top}%`,
+              animationDuration: `${token.duration}s`,
+            }}
+          />
+        ))}
+        {blasts.map(blast => (
+          <div key={blast.id} className="green-blast" />
+        ))}
+      </div>
+
+      {/* Headline & content */}
+      <div className="relative mb-16 z-10">
+        <h1
+          className="text-7xl font-black text-white tracking-tighter"
+          style={{ textShadow: '0 0 30px rgba(255,255,255,0.4)' }}
+        >
+          $YG
+        </h1>
         <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-3/4 h-2 bg-gradient-to-r from-transparent via-white to-transparent"></div>
       </div>
-      
-      <div className="bg-black rounded-none p-16 border-4 border-gray-800 mb-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-black opacity-70"></div>
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)' }}></div>
-        
+
+      <div className="bg-black rounded-none p-16 border-4 border-gray-800 mb-16 relative overflow-hidden z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-black opacity-70" />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)' }}
+        />
+
         <div className="relative z-10">
-          <div className="w-full flex justify-center mb-20">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl"></div>
-              <img src={ygGold} alt="$YG Token" className="w-[500px] h-[500px] object-cover rounded-xl shadow-2xl border-4 border-gray-800 relative hover:scale-105 transition-transform duration-500" />
-            </div>
-          </div>
-          
           <div className="max-w-3xl mx-auto space-y-8">
             <div className="bg-black p-8 border-4 border-gray-800">
-              <p className="text-2xl font-black text-white tracking-wider leading-relaxed uppercase" style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.7)' }}>
+              <p
+                className="text-2xl font-black text-white tracking-wider leading-relaxed uppercase"
+                style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.7)' }}
+              >
                 THE ULTIMATE POWER TOKEN.
-                <br />
-                FORGED IN THE FIRES OF THE METAVERSE.
-                <br />
-                $YG IS DIGITAL DOMINANCE.
-                <br />
-                STAKE IT. EARN IT. COMMAND IT.
               </p>
             </div>
-            
+
             <div className="bg-black p-8 border-4 border-gray-800">
-              <h2 className="text-3xl font-black text-white mb-6 tracking-tight uppercase" style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.7)' }}>CONTRACT ADDRESS</h2>
+              <h2
+                className="text-3xl font-black text-white mb-6 tracking-tight uppercase"
+                style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.7)' }}
+              >
+                CONTRACT ADDRESS
+              </h2>
               <div className="bg-gray-900 rounded-lg p-6 border-4 border-gray-800">
-                <p className="text-2xl font-black text-gray-400 tracking-wider">COMING SOON</p>
+                <p className="text-2xl font-black text-gray-400 tracking-wider">TOMORROW</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Animation styles */}
+      <style jsx>{`
+        @keyframes floatToken {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-200px) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        .floating-token {
+          position: absolute;
+          animation: floatToken linear infinite;
+          pointer-events: none;
+        }
+
+        @keyframes greenFlash {
+          0% {
+            opacity: 0;
+          }
+          50% {
+            opacity: 0.25;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+
+        .green-blast {
+          position: absolute;
+          inset: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 255, 0, 0.3);
+          animation: greenFlash 0.8s ease-out forwards;
+          pointer-events: none;
+        }
+      `}</style>
     </section>
   );
 }
