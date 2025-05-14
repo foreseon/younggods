@@ -69,10 +69,10 @@ function Layout() {
           <h1 className="text-7xl font-black mb-2 tracking-tight text-white">YoungGods</h1>
           <nav className="flex gap-8 mb-6">
             <Link to="/" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">Main</Link>
-            <Link to="/shop" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">Shop</Link>
+            <Link to="/token" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">$YG</Link>
             <Link to="/game" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">Game</Link>
             <Link to="/staking" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">Staking</Link>
-            <Link to="/token" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">$YG</Link>
+            <Link to="/shop" className="text-gray-300 hover:text-white font-bold text-lg transition-colors">Shop</Link>
           </nav>
         </header>
         <main className="flex-1 flex flex-col items-center justify-center w-full">
@@ -131,10 +131,10 @@ function Main() {
       <div className="mb-16">
         <h2 className="text-5xl font-black mb-12 text-white">Explore</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <Link to="/shop" className="block bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 flex flex-col items-center border border-gray-700 hover:border-white">
-            <img src={ygPizza} alt="Shop" className="w-32 h-32 object-cover rounded-lg mb-4" />
-            <span className="text-xl font-bold mb-2 text-white">Shop</span>
-            <span className="text-gray-400">See upcoming merch and collectibles</span>
+          <Link to="/token" className="block bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 flex flex-col items-center border border-gray-700 hover:border-white">
+            <img src={ygGold} alt="$YG Token" className="w-32 h-32 object-cover rounded-lg mb-4" />
+            <span className="text-xl font-bold mb-2 text-white">$YG</span>
+            <span className="text-gray-400">The power token</span>
           </Link>
           <Link to="/game" className="block bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 flex flex-col items-center border border-gray-700 hover:border-white">
             <img src={ygMinigun} alt="Game" className="w-32 h-32 object-cover rounded-lg mb-4" />
@@ -146,10 +146,10 @@ function Main() {
             <span className="text-xl font-bold mb-2 text-white">Staking</span>
             <span className="text-gray-400">Stake your NFTs</span>
           </Link>
-          <Link to="/token" className="block bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 flex flex-col items-center border border-gray-700 hover:border-white">
-            <img src={ygGold} alt="$YG Token" className="w-32 h-32 object-cover rounded-lg mb-4" />
-            <span className="text-xl font-bold mb-2 text-white">$YG</span>
-            <span className="text-gray-400">The power token</span>
+          <Link to="/shop" className="block bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 flex flex-col items-center border border-gray-700 hover:border-white">
+            <img src={ygPizza} alt="Shop" className="w-32 h-32 object-cover rounded-lg mb-4" />
+            <span className="text-xl font-bold mb-2 text-white">Shop</span>
+            <span className="text-gray-400">See upcoming merch and collectibles</span>
           </Link>
         </div>
       </div>
