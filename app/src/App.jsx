@@ -747,7 +747,7 @@ function Token() {
               >
                 CONTRACT ADDRESS
               </h2>
-              <div className="bg-gray-900 rounded-lg p-6 border-4 border-gray-800">
+              <div className="bg-gray-900 rounded-lg p-6 border-4 border-gray-800 w-full max-w-xs sm:max-w-sm mx-auto">
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-400 tracking-wider break-words">TOMORROW</p>
               </div>
             </div>
