@@ -87,12 +87,24 @@ export default function MusicPlayer() {
   };
 
   return (
-    <div className="fixed w-1 h-1 overflow-hidden pointer-events-none top-0 left-0">
-      {/* Hidden audio element that handles playback */}
+    <div className="fixed bottom-4 left-4 z-50 flex items-center gap-1 bg-gray-900/80 backdrop-blur-md rounded-full px-3 py-2 shadow-lg text-white text-xs select-none">
+      {/* Controls */}
+      <button
+        onClick={togglePlay}
+        className="hover:text-yellow-400 transition-colors"
+        aria-label={isPlaying ? 'Pause' : 'Play'}
+      >
+        {isPlaying ? '⏸️' : '▶️'}
+      </button>
+      <button onClick={playPrev} aria-label="Prev" className="hover:text-yellow-400">⏮️</button>
+      <button onClick={playNext} aria-label="Next" className="hover:text-yellow-400">⏭️</button>
+
+      {/* Hidden audio element */}
       <audio
         ref={audioRef}
         src={tracks[trackIndex].src}
         onEnded={playNext}
+        className="hidden"
       />
     </div>
   );
