@@ -55,8 +55,8 @@ function Layout() {
               {/* Right coin */}
               <img src={logoShort} alt="coin" className="hidden md:block w-10 h-10 ml-4 animate-coin-flip rounded-full object-cover border-2 border-yellow-400 shadow-lg" />
             </button>
-            <p className="mt-4 text-base font-semibold tracking-wider animate-text-shine">
-              CA: tomorrow.
+            <p className="mt-4 text-lg md:text-xl font-semibold tracking-wider animate-text-shine">
+              CA: soon.
             </p>
           </div>
         </div>
@@ -642,6 +642,7 @@ function Staking() {
 function Token() {
   const [tokens, setTokens] = useState([]);
   const [blasts, setBlasts] = useState([]);
+  const [copied, setCopied] = useState(false);
   const blastDelayRef = useRef(2500);
   const blastTimeout = useRef(null);
 
@@ -747,8 +748,13 @@ function Token() {
               >
                 CONTRACT ADDRESS
               </h2>
-              <div className="bg-gray-900 rounded-lg p-6 border-4 border-gray-800 w-full max-w-xs sm:max-w-sm mx-auto">
-                <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-400 tracking-wider break-words">TOMORROW</p>
+              <div className="bg-gray-900 rounded-lg p-6 border-4 border-gray-800 w-full max-w-xs sm:max-w-sm mx-auto cursor-pointer group" onClick={() => {
+                navigator.clipboard.writeText('TOMORROW');
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1500);
+              }}>
+                <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-400 tracking-wider break-words animate-vibrate group-hover:text-green-400 select-none">TOMORROW</p>
+                {copied && <span className="block mt-2 text-xs text-green-400">Copied!</span>}
               </div>
             </div>
           </div>
@@ -794,6 +800,20 @@ function Token() {
           background: rgba(0, 255, 0, 0.3);
           animation: greenFlash 0.8s ease-out forwards;
           pointer-events: none;
+        }
+
+        /* vibrate */
+        @keyframes vibrate {
+          0% { transform: translate(0); }
+          20% { transform: translate(-1px, 1px); }
+          40% { transform: translate(-1px, -1px); }
+          60% { transform: translate(1px, 1px); }
+          80% { transform: translate(1px, -1px); }
+          100% { transform: translate(0); }
+        }
+
+        .animate-vibrate {
+          animation: vibrate 0.3s infinite;
         }
       `}</style>
     </section>
