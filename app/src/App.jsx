@@ -800,6 +800,81 @@ function Token() {
   );
 }
 
+function Whitepaper() {
+  return (
+    <section className="w-full max-w-4xl mx-auto text-center mb-20 px-4">
+      <h1 className="text-6xl font-black text-white tracking-tight mb-12">$YG Whitepaper</h1>
+
+      <div className="bg-gray-900 border-4 border-gray-800 p-10 rounded-xl shadow-2xl">
+        <h2 className="text-4xl font-black text-yellow-400 mb-6 tracking-tight">Tokenomics</h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left text-white text-xl font-semibold">
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 shadow-lg">
+            <p className="mb-2">NFT Holder Allocation</p>
+            <p className="text-3xl font-black text-yellow-400">5%</p>
+          </div>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 shadow-lg">
+            <p className="mb-2">Gaming Rewards</p>
+            <p className="text-3xl font-black text-yellow-400">5%</p>
+          </div>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 shadow-lg">
+            <p className="mb-2">Team Allocation</p>
+            <p className="text-3xl font-black text-yellow-400">3%</p>
+          </div>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 shadow-lg sm:col-span-2">
+            <p className="mb-2">Community & Ecosystem</p>
+            <p className="text-3xl font-black text-yellow-400">87%</p>
+          </div>
+        </div>
+
+        <h2 className="text-3xl font-black text-white mt-16 mb-6 tracking-tight">Utility & Ecosystem</h2>
+
+        <div className="space-y-10 text-left text-gray-300 leading-relaxed">
+          <div>
+            <h3 className="text-2xl font-bold text-yellow-400 mb-2">GameFi Arena</h3>
+            <p>
+              $YG fuels an on-chain arcade where players stake tokens to participate in competitive mini-games.
+              Weekly prize pools, seasonal leaderboards, and NFT-bound achievement badges ensure a sustainable
+              play-to-earn loop.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-yellow-400 mb-2">NFT Staking Vault</h3>
+            <p>
+              Genesis NFT holders may lock their assets to earn a share of the daily emission pool (5 %).
+              Multipliers reward longer lock periods while dynamic rarity boosts encourage diversified vaults.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-yellow-400 mb-2">Merch & Collectibles Shop</h3>
+            <p>
+              Exclusive drops—ranging from digital wearables to limited-edition streetwear—are priced
+              exclusively in $YG. A burn-and-mint model retires 50 % of every purchase, tightening supply.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-yellow-400 mb-2">Governance</h3>
+            <p>
+              Token holders can submit YGIPs (YoungGods Improvement Proposals) and vote on emission tweaks,
+              game parameters, and treasury deployments. Voting power is quadratic to prevent whale dominance.
+            </p>
+          </div>
+        </div>
+
+        {/* Roadmap removed as per request */}
+
+        <p className="mt-10 text-xs text-gray-500 italic">
+          This whitepaper is a living document. Figures and timelines are subject to community governance and
+          prevailing market conditions.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   return (
     <Routes>
@@ -809,6 +884,7 @@ function App() {
         <Route path="game" element={<Game />} />
         <Route path="staking" element={<Staking />} />
         <Route path="token" element={<Token />} />
+        <Route path="yg-whitepaper" element={<Whitepaper />} />
       </Route>
     </Routes>
   );
