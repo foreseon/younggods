@@ -643,6 +643,7 @@ function Token() {
   const [tokens, setTokens] = useState([]);
   const [blasts, setBlasts] = useState([]);
   const [copied, setCopied] = useState(false);
+  const [buys, setBuys] = useState([]);
   const blastDelayRef = useRef(2500);
   const blastTimeout = useRef(null);
 
@@ -686,6 +687,24 @@ function Token() {
     const tokenInterval = setInterval(addToken, 1000);
 
     return () => clearInterval(tokenInterval);
+  }, []);
+
+  // spawn BUY texts
+  useEffect(() => {
+    const spawn = () => {
+      setBuys(prev => [
+        ...prev,
+        {
+          id: Date.now() + Math.random(),
+          x: (Math.random() - 0.5) * 120, // px offset
+          y: (Math.random() - 0.5) * 120,
+        },
+      ]);
+    };
+
+    const int = setInterval(spawn, 700);
+
+    return () => clearInterval(int);
   }, []);
 
   return (
@@ -748,13 +767,25 @@ function Token() {
               >
                 CONTRACT ADDRESS
               </h2>
-              <div className="bg-gray-900 rounded-lg p-6 border-4 border-gray-800 w-full max-w-xs sm:max-w-sm mx-auto cursor-pointer group" onClick={() => {
+              <div className="relative bg-gray-900 rounded-lg p-6 border-4 border-gray-800 w-full max-w-xs sm:max-w-sm mx-auto cursor-pointer group overflow-hidden" onClick={() => {
                 navigator.clipboard.writeText('TOMORROW');
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1500);
               }}>
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-400 tracking-wider break-words animate-vibrate group-hover:text-green-400 select-none">TOMORROW</p>
                 {copied && <span className="block mt-2 text-xs text-green-400">Copied!</span>}
+
+                {/* floating BUY texts */}
+                {buys.map(b => (
+                  <span
+                    key={b.id}
+                    className="absolute left-1/2 top-1/2 text-green-400 text-xs font-bold buy-float whitespace-nowrap select-none"
+                    style={{ '--tx': `${b.x}px`, '--ty': `${b.y}px` }}
+                    onAnimationEnd={() => setBuys(prev => prev.filter(x => x.id !== b.id))}
+                  >
+                    BUY
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -814,6 +845,15 @@ function Token() {
 
         .animate-vibrate {
           animation: vibrate 0.3s infinite;
+        }
+
+        @keyframes buyFloat {
+          0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1.5); }
+        }
+
+        .buy-float {
+          animation: buyFloat 1.2s ease-out forwards;
         }
       `}</style>
     </section>
