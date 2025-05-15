@@ -56,7 +56,7 @@ function Layout() {
               <img src={logoShort} alt="coin" className="hidden md:block w-10 h-10 ml-4 animate-coin-flip rounded-full object-cover border-2 border-yellow-400 shadow-lg" />
             </button>
             <p className="mt-4 text-lg md:text-xl font-semibold tracking-wider animate-text-shine">
-              CA: soon.
+              CA: TODAY.
             </p>
           </div>
         </div>
@@ -168,7 +168,7 @@ function Main() {
           </span>
           Follow on X
         </a>
-        <a href="https://discord.gg/HFUupt2VRR" target="_blank" rel="noopener noreferrer" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
+        <a href="https://discord.gg/xuMyyS63v3" target="_blank" rel="noopener noreferrer" className="bg-gray-800 px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-bold flex items-center gap-3 border border-gray-700 hover:border-white text-white">
           <span className="inline-block w-6 h-6">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-indigo-400"><path d="M20.317 4.369A19.791 19.791 0 0 0 16.885 3.1a.074.074 0 0 0-.078.037c-.34.607-.719 1.396-.984 2.013a18.219 18.219 0 0 0-5.456 0 12.51 12.51 0 0 0-.995-2.013.077.077 0 0 0-.078-.037A19.736 19.736 0 0 0 3.684 4.369a.07.07 0 0 0-.032.027C.533 8.159-.32 11.81.099 15.404a.082.082 0 0 0 .031.056c2.052 1.507 4.042 2.422 5.992 3.029a.077.077 0 0 0 .084-.027c.461-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.104c-.652-.247-1.27-.549-1.872-.892a.077.077 0 0 1-.008-.128c.126-.094.252-.192.371-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.075.075 0 0 1 .078.009c.12.099.245.197.372.291a.077.077 0 0 1-.006.128 12.298 12.298 0 0 1-1.873.892.076.076 0 0 0-.04.105c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028c1.961-.607 3.951-1.522 6.003-3.029a.077.077 0 0 0 .03-.055c.5-4.073-.838-7.693-3.285-10.999a.061.061 0 0 0-.03-.028zM8.02 14.331c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.094 2.156 2.418 0 1.334-.955 2.419-2.156 2.419zm7.974 0c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.175 1.094 2.156 2.418 0 1.334-.946 2.419-2.156 2.419z"/></svg>
           </span>
@@ -329,6 +329,7 @@ function Game() {
   const [flipCount, setFlipCount] = useState(0);
   const [showVictoryPopup, setShowVictoryPopup] = useState(false);
   const [winAmount, setWinAmount] = useState(0);
+  const [sparks, setSparks] = useState([]);
 
   const handleFlip = (choice) => {
     if (betAmount <= 0 || betAmount > balance) return;
@@ -355,6 +356,22 @@ function Game() {
       }
     }, 3000);
   };
+
+  // spawn coin sparks
+  useEffect(() => {
+    const spawnSpark = () => {
+      if (Math.random() < 0.4) {
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 140 + Math.random() * 120; // px
+        setSparks(prev => [
+          ...prev,
+          { id: Date.now() + Math.random(), x: Math.cos(angle) * distance, y: Math.sin(angle) * distance },
+        ]);
+      }
+    };
+    const sparkInt = setInterval(spawnSpark, 1000);
+    return () => clearInterval(sparkInt);
+  }, []);
 
   return (
     <section className="w-full max-w-5xl mx-auto text-center mb-10 px-4">
@@ -449,23 +466,21 @@ function Game() {
           {/* Fireworks Animation */}
           {showVictoryPopup && (
             <div className="fixed inset-0 pointer-events-none">
-              {[...Array(20)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute animate-firework"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 2}s`,
-                  }}
-                >
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <div className="w-1 h-1 bg-red-500 rounded-full absolute top-0 left-0 animate-firework-particle"></div>
-                  <div className="w-1 h-1 bg-blue-500 rounded-full absolute top-0 right-0 animate-firework-particle"></div>
-                  <div className="w-1 h-1 bg-green-500 rounded-full absolute bottom-0 left-0 animate-firework-particle"></div>
-                  <div className="w-1 h-1 bg-purple-500 rounded-full absolute bottom-0 right-0 animate-firework-particle"></div>
-                </div>
-              ))}
+              {[...Array(60)].map((_, i) => {
+                const angle = Math.random() * 2 * Math.PI;
+                const dist = 300 + Math.random() * 150;
+                const x = Math.cos(angle) * dist;
+                const y = Math.sin(angle) * dist;
+                return (
+                  <div
+                    key={i}
+                    className="absolute left-1/2 top-1/2 animate-explosion-spark"
+                    style={{ '--x': `${x}px`, '--y': `${y}px`, animationDelay: `${Math.random() * 0.2}s` }}
+                  >
+                    <div className="w-5 h-5 bg-yellow-300 rounded-full shadow-xl"></div>
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -500,15 +515,9 @@ function Game() {
           100% { transform: scale(1); }
         }
 
-        @keyframes firework {
-          0% { transform: scale(0); opacity: 1; }
-          50% { transform: scale(1); opacity: 1; }
-          100% { transform: scale(2); opacity: 0; }
-        }
-
-        @keyframes firework-particle {
-          0% { transform: translate(0, 0); opacity: 1; }
-          100% { transform: translate(var(--x, 20px), var(--y, 20px)); opacity: 0; }
+        @keyframes explosionSpark {
+          0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
+          100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(2); opacity: 0; }
         }
 
         @keyframes loss-flash {
@@ -529,12 +538,8 @@ function Game() {
           animation: popup 0.5s forwards;
         }
 
-        .animate-firework {
-          animation: firework 2s infinite;
-        }
-
-        .animate-firework-particle {
-          animation: firework-particle 1s infinite;
+        .animate-explosion-spark {
+          animation: explosionSpark 1.2s ease-out forwards;
         }
 
         .animate-loss-flash {
@@ -644,6 +649,7 @@ function Token() {
   const [blasts, setBlasts] = useState([]);
   const [copied, setCopied] = useState(false);
   const [buys, setBuys] = useState([]);
+  const [sparks, setSparks] = useState([]);
   const blastDelayRef = useRef(2500);
   const blastTimeout = useRef(null);
 
@@ -707,6 +713,22 @@ function Token() {
     return () => clearInterval(int);
   }, []);
 
+  // spawn coin sparks
+  useEffect(() => {
+    const spawnSpark = () => {
+      if (Math.random() < 0.4) {
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 140 + Math.random() * 120; // px
+        setSparks(prev => [
+          ...prev,
+          { id: Date.now() + Math.random(), x: Math.cos(angle) * distance, y: Math.sin(angle) * distance },
+        ]);
+      }
+    };
+    const sparkInt = setInterval(spawnSpark, 1000);
+    return () => clearInterval(sparkInt);
+  }, []);
+
   return (
     <section className="w-full max-w-7xl mx-auto text-center mb-20 px-4">
       {/* Floating tokens & green blasts */}
@@ -768,11 +790,11 @@ function Token() {
                 CONTRACT ADDRESS
               </h2>
               <div className="relative bg-gray-900 rounded-lg p-6 border-4 border-gray-800 w-full max-w-xs sm:max-w-sm mx-auto cursor-pointer group overflow-hidden" onClick={() => {
-                navigator.clipboard.writeText('TOMORROW');
+                navigator.clipboard.writeText('TODAY.');
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1500);
               }}>
-                <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-400 tracking-wider break-words animate-vibrate group-hover:text-green-400 select-none">TOMORROW</p>
+                <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-400 tracking-wider break-words animate-vibrate group-hover:text-green-400 select-none">TODAY.</p>
                 {copied && <span className="block mt-2 text-xs text-green-400">Copied!</span>}
 
                 {/* floating BUY texts */}
@@ -785,6 +807,36 @@ function Token() {
                   >
                     BUY
                   </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Epic spinning $YG token */}
+            <div className="w-full flex justify-center mt-16">
+              <div className="relative">
+                {/* pulsing glow */}
+                <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-3xl animate-yg-glow" />
+
+                {/* main coin */}
+                <img
+                  src={logoShort}
+                  alt="$YG Coin"
+                  className="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full border-[6px] border-yellow-400 shadow-2xl animate-yg-spin"
+                />
+
+                {/* sweeping shine */}
+                <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-white/40 to-transparent opacity-0 animate-yg-shine" />
+                </div>
+
+                {/* sparks */}
+                {sparks.map(s => (
+                  <div
+                    key={s.id}
+                    className="absolute left-1/2 top-1/2 w-5 h-5 bg-yellow-300 rounded-full shadow-xl animate-coin-spark"
+                    style={{ '--x': `${s.x}px`, '--y': `${s.y}px` }}
+                    onAnimationEnd={() => setSparks(prev => prev.filter(p => p.id !== s.id))}
+                  />
                 ))}
               </div>
             </div>
@@ -854,6 +906,47 @@ function Token() {
 
         .buy-float {
           animation: buyFloat 1.2s ease-out forwards;
+        }
+
+        /* $YG coin animations */
+        @keyframes ygSpin {
+          0% { transform: rotateY(0deg); }
+          100% { transform: rotateY(360deg); }
+        }
+
+        .animate-yg-spin {
+          animation: ygSpin 4s linear infinite;
+          transform-style: preserve-3d;
+        }
+
+        @keyframes ygGlow {
+          0%,100% { opacity: 0.35; }
+          50% { opacity: 0.8; }
+        }
+
+        .animate-yg-glow {
+          animation: ygGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes ygShine {
+          0% { opacity: 0; transform: translate(-120%, 0) rotate(0deg) scale(0.8); }
+          30% { opacity: 0.9; }
+          50% { opacity: 0; }
+          100% { opacity: 0; transform: translate(120%, 0) rotate(360deg) scale(1.2); }
+        }
+
+        .animate-yg-shine {
+          background: linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 60%);
+          animation: ygShine 2s linear infinite;
+        }
+
+        @keyframes coinSpark {
+          0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+          100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(2.4); opacity: 0; }
+        }
+
+        .animate-coin-spark {
+          animation: coinSpark 0.8s ease-out forwards;
         }
       `}</style>
     </section>
@@ -951,4 +1044,5 @@ function App() {
 }
 
 export default App;
+
 
